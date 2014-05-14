@@ -11,8 +11,6 @@ modString = mod . charToInt
 reverse' :: [Integer] -> [Integer]
 reverse' xs = error "todo"
 
-isValid :: Integer -> Bool
-isValid n = n == 0
 -- | Convert a number to a list of digits
 --
 -- Examples:
@@ -79,4 +77,4 @@ sumDigits = sum . concat . map toDigits
 -- True
 --
 validate :: Integer -> Bool
-validate = isValid . flip rem 10 . sumDigits . toDigitsRev
+validate = (==) 0 . flip rem 10 . sumDigits . toDigitsRev
