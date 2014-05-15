@@ -35,7 +35,7 @@ toDigits n = case n > 0 of
 --
 -- >>> toDigitsRev 1234
 -- [4,3,2,1]
--- 
+--
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev = reverse . toDigits
 
