@@ -25,10 +25,10 @@ reverse' xs = error "todo"
 -- >>> toDigits 1234
 -- [1,2,3,4]
 --
--- >>> toDigits 0
+-- >>> toDigits (-17)
 -- []
 --
--- >>> toDigits (-17)
+-- >>> toDigits 0
 -- []
 --
 toDigits :: Integer -> [Integer]
@@ -72,6 +72,9 @@ doubleEveryOther = reverse . zipWith (*) (cycle [1,2]) . reverse
 --
 -- >>> sumDigits [1, 12, 123]
 -- 10
+--
+-- >>> sumDigits [16,7,12,5]
+-- 22
 --
 sumDigits :: [Integer] -> Integer
 sumDigits = sum . concat . map toDigits
