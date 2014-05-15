@@ -32,3 +32,7 @@ parseMessage xs = case words xs of
 parse :: String -> [LogMessage]
 parse = (map parseMessage) . lines
 
+
+insert :: LogMessage -> MessageTree -> MessageTree
+insert = error "todo"
+

@@ -2,11 +2,18 @@ module Intro where
 
 -- Helper functions
 
+-- | Convert an integer in Char format to Integer
+--
+-- Examples:
+--
+-- >>> charToInt '4'
+-- 4
+--
+-- >>> charToInt '0'
+-- 0
+--
 charToInt :: Char -> Integer
 charToInt n = (read [n]) :: Integer
-
-modString :: Char -> Integer -> Integer
-modString = mod . charToInt
 
 reverse' :: [Integer] -> [Integer]
 reverse' xs = error "todo"
@@ -26,7 +33,7 @@ reverse' xs = error "todo"
 --
 toDigits :: Integer -> [Integer]
 toDigits n = case n > 0 of 
-             True -> foldr ((:) . (flip modString 10)) [] (show n)
+             True -> map charToInt (show n)
              _ -> []
 
 -- | Convert a number to a list of digits, and reverse the list
