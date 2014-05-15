@@ -54,10 +54,13 @@ toDigitsRev = reverse . toDigits
 -- [1,4,3]
 --
 -- >>> doubleEveryOther [4,5,6,7]
--- [4,10,6,14]
+-- [8,5,12,7]
+--
+-- >>> doubleEveryOther [8,7,6,5]
+-- [16,7,12,5]
 --
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther = zipWith (*) (cycle [1,2])
+doubleEveryOther = reverse . zipWith (*) (cycle [1,2]) . reverse
 
 
 -- | Sum all the digits in a list
