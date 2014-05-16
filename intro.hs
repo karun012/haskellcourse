@@ -91,3 +91,18 @@ sumDigits = sum . concat . map toDigits
 --
 validate :: Integer -> Bool
 validate = (==) 0 . flip rem 10 . sumDigits . toDigitsRev
+
+type Peg = String
+type Move = (Peg, Peg)
+
+-- | The Towers of Hanoi
+--
+-- Examples:
+--
+-- >>> hanoi 2 "a" "b" "c"
+-- [("a","c"),("a","b"),("c","b")]
+--
+hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
+hanoi n a b c = case n > 0 of 
+                True -> hanoi (n - 1) a c b ++ [(a, b)] ++ hanoi (n - 1) c b a
+                _ -> []
