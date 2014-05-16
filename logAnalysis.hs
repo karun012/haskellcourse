@@ -37,16 +37,19 @@ isError :: LogMessage -> Bool
 isError (LogMessage (Error _) _ _) = True
 isError _ = False
 
--- | Given an Error message returns it's description
--- >>> errorMessage (LogMessage (Error 2) 3 "x")
+-- | Given an LogMessage returns the description
+-- >>> description (LogMessage (Error 2) 3 "x")
 -- "x"
 --
--- >>> errorMessage (LogMessage Info 2 "foo")
--- ""
+-- >>> description (LogMessage Info 2 "foo")
+-- "foo"
 --
-errorMessage :: LogMessage -> String
-errorMessage (LogMessage (Error _) _ message) = message
-errorMessage _ = ""
+-- >>> description (Unknown "bar")
+-- "bar"
+--
+description :: LogMessage -> String
+description (LogMessage _ _ message) = message
+description (Unknown message) = message
 
 -- | Parse a string into a LogMessage
 --
@@ -143,4 +146,4 @@ inOrder Leaf = []
 -- True
 --
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong = map errorMessage . (filter (\x -> (severity x) >= 50)) . (filter isError) . inOrder . build
+whatWentWrong = map description . (filter (\x -> (severity x) >= 50)) . (filter isError) . inOrder . build
