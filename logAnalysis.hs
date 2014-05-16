@@ -87,3 +87,17 @@ insert logMessage (Node left lm right) = case timeStamp logMessage < timeStamp l
 --
 build :: [LogMessage] -> MessageTree
 build = foldl (flip insert) Leaf
+
+-- | Builds an in order list of LogMessages from a MessageTree
+--
+-- >>> let foo = LogMessage Warning 10 "foo"
+-- >>> let baz = LogMessage Warning 5 "baz"
+-- >>> let bif = LogMessage Warning 15 "bif"
+-- >>> let gaz = LogMessage (Error 1) 20 "gaz"
+-- >>> let tree = Node (Node Leaf baz Leaf) foo (Node Leaf bif (Node Leaf gaz Leaf))
+-- >>> inOrder tree == [baz, foo, bif, gaz]
+-- True
+--
+inOrder :: MessageTree -> [LogMessage]
+inOrder (Node left root right) = inOrder left ++ [root] ++ inOrder right
+inOrder Leaf = []
