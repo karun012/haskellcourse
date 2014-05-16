@@ -1,5 +1,5 @@
 {
-  "name": "haskellCourse cis194",
+  "name": "haskellCourseCis194",
   "version": "1.0.0",
   "devDependencies": {
     "grunt": "~0.4.1",
