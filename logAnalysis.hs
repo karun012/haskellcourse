@@ -4,7 +4,8 @@ module LogAnalysis where
 import Log
 -- Helper functions
 --
--- >>> timeStamp (Info 2 "x")
+-- | Given a LogMessage returns the timestamp
+-- >>> timeStamp (LogMessage Info 2 "x")
 -- 2
 --
 -- >>> timeStamp (Unknown "foo")
@@ -12,7 +13,40 @@ import Log
 --
 timeStamp :: LogMessage -> TimeStamp
 timeStamp (LogMessage _ ts _) = ts
-timeStamp _ = 0
+timeStamp (Unknown _) = 0
+
+-- | Given a LogMessage returns the severity
+-- >>> severity (LogMessage (Error 2) 3 "x")
+-- 2
+--
+-- >>> severity (LogMessage Info 2 "foo")
+-- 0
+--
+severity :: LogMessage -> Int
+severity (LogMessage (Error s) _ _) = s
+severity _ = 0
+
+-- | Given a LogMessage tells whether it's an Error or not
+-- >>> isError (LogMessage (Error 2) 3 "x")
+-- True
+--
+-- >>> isError (LogMessage Info 2 "foo")
+-- False
+--
+isError :: LogMessage -> Bool
+isError (LogMessage (Error _) _ _) = True
+isError _ = False
+
+-- | Given an Error message returns it's description
+-- >>> errorMessage (LogMessage (Error 2) 3 "x")
+-- "x"
+--
+-- >>> errorMessage (LogMessage Info 2 "foo")
+-- ""
+--
+errorMessage :: LogMessage -> String
+errorMessage (LogMessage (Error _) _ message) = message
+errorMessage _ = ""
 
 -- | Parse a string into a LogMessage
 --
@@ -101,3 +135,12 @@ build = foldl (flip insert) Leaf
 inOrder :: MessageTree -> [LogMessage]
 inOrder (Node left root right) = inOrder left ++ [root] ++ inOrder right
 inOrder Leaf = []
+
+-- | Find messages with errors whose severity is 50+
+--
+-- >>> let messages = [LogMessage (Error 49) 10 "alpha", LogMessage (Error 100) 9 "kappa", LogMessage (Error 51) 11 "beta", Unknown "foo", LogMessage Warning 100 "blar"]
+-- >>> whatWentWrong messages == ["kappa", "beta"]
+-- True
+--
+whatWentWrong :: [LogMessage] -> [String]
+whatWentWrong = map errorMessage . (filter (\x -> (severity x) >= 50)) . (filter isError) . inOrder . build
