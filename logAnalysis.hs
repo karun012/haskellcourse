@@ -2,6 +2,17 @@
 module LogAnalysis where
 
 import Log
+-- Helper functions
+--
+-- >>> timeStamp (Info 2 "x")
+-- 2
+--
+-- >>> timeStamp (Unknown "foo")
+-- 0
+--
+timeStamp :: LogMessage -> TimeStamp
+timeStamp (LogMessage _ ts _) = ts
+timeStamp _ = 0
 
 -- | Parse a string into a LogMessage
 --
@@ -33,6 +44,33 @@ parse :: String -> [LogMessage]
 parse = (map parseMessage) . lines
 
 
+-- | Inserts a LogMessage into a MessageTree
+--
+-- >>> insert (Unknown "foo") Leaf
+-- Leaf
+--
+-- >>> insert (parseMessage "I 2 x") Leaf
+-- Node Leaf (LogMessage Info 2 "x") Leaf
+--
+-- insert (LogMessage Info 5 "baz") Leaf
+-- Node Leaf (LogMessage Info 5 "baz") Leaf
+-- 
+-- >>> let foo = LogMessage Info 10 "foo"
+-- >>> let baz = LogMessage Info 5 "baz"
+-- >>> let bif = LogMessage Info 15 "bif"
+-- >>> let a = Node Leaf foo Leaf
+--
+-- >>> let b = insert baz a
+-- >>> b == Node (Node Leaf baz Leaf) foo Leaf
+-- True
+--
+-- >>> let c = insert bif b
+-- >>> c == Node (Node Leaf baz Leaf) foo (Node Leaf bif Leaf)
+-- True
+--
 insert :: LogMessage -> MessageTree -> MessageTree
-insert = error "todo"
-
+insert (Unknown _) tree = tree
+insert logMessage@(_) Leaf = Node Leaf logMessage Leaf
+insert logMessage (Node left lm right) = case timeStamp logMessage < timeStamp lm of
+                                         True -> Node (insert logMessage left) lm right
+                                         False -> Node left lm (insert logMessage right)
