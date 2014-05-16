@@ -74,3 +74,16 @@ insert logMessage@(_) Leaf = Node Leaf logMessage Leaf
 insert logMessage (Node left lm right) = case timeStamp logMessage < timeStamp lm of
                                          True -> Node (insert logMessage left) lm right
                                          False -> Node left lm (insert logMessage right)
+
+-- | Builds a MessageTree from a list of messages
+--
+-- >>> let foo = LogMessage Info 10 "foo"
+-- >>> let baz = LogMessage Info 5 "baz"
+-- >>> let bif = LogMessage Info 15 "bif"
+-- 
+-- >>> let result = build [foo, baz, bif]
+-- >>> result == Node (Node Leaf baz Leaf) foo (Node Leaf bif Leaf)
+-- True
+--
+build :: [LogMessage] -> MessageTree
+build = foldl (flip insert) Leaf
