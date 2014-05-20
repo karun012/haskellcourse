@@ -62,5 +62,8 @@ skips xs = zipWith everyNth [1..length xs] (replicate (length xs) xs)
 -- >>> localMaxima [1,2,3,4,5]
 -- []
 localMaxima :: [Integer] -> [Integer]
-localMaxima = error "todo"
+localMaxima [x,y,z] = if (x < y && y > z) then [y] else []
+localMaxima xs = case length xs > 3 of
+                 True -> localMaxima (take 3 xs) ++ localMaxima (drop 1 xs)
+                 False -> []
 
