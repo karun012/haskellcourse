@@ -78,7 +78,7 @@ drawRow :: [Integer] -> String
 drawRow xs = concatMap (\x -> if x `elem` xs then "*" else " ") [0..9] ++ "\n"
 
 drawRows :: [[Integer]] -> String
-drawRows xs = concatMap drawRow xs
+drawRows = concatMap drawRow
 
 -- | Draws a vertical histogram
 --
@@ -86,4 +86,4 @@ drawRows xs = concatMap drawRow xs
 -- "   * *    \n==========\n0123456789\n"
 -- 
 histogram :: [Integer] -> String
-histogram xs = (++) ((drawRows . rows . group . sort) xs) "==========\n0123456789\n" 
+histogram = (++ "==========\n0123456789\n") . drawRows . rows . group . sort
