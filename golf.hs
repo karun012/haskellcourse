@@ -69,9 +69,9 @@ localMaxima xs = case length xs > 3 of
                  True -> localMaxima (take 3 xs) ++ localMaxima (drop 1 xs)
                  False -> []
 
-rows :: [[Integer]] -> [[Integer]]
-rows xs = case length xs > 0 of 
-          True -> concatMap (take 1) xs : rows (filter (not . null) (map (drop 1) xs))
+createRowCandidates :: [[Integer]] -> [[Integer]]
+createRowCandidates xs = case length xs > 0 of 
+          True -> concatMap (take 1) xs : createRowCandidates (filter (not . null) (map (drop 1) xs))
           _ -> []
 
 drawRow :: [Integer] -> String
@@ -86,4 +86,4 @@ drawRows = concatMap drawRow
 -- "   * *    \n==========\n0123456789\n"
 -- 
 histogram :: [Integer] -> String
-histogram = (++ "==========\n0123456789\n") . drawRows . rows . group . sort
+histogram = (++ "==========\n0123456789\n") . drawRows . createRowCandidates . group . sort
