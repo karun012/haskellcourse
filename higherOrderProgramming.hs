@@ -42,22 +42,3 @@ fun2 n
 fun2' :: Integer -> Integer
 fun2' = sum . filter even . takeWhile (> 1) . iterate (\x -> if even x then x `div` 2 else 3 * x + 1)
 
-data Tree a = Leaf | Node Integer (Tree a) a (Tree a) deriving (Show, Eq)
-
--- | Creates a balanced binary tree from a list of values
---
--- >>> foldTree [] 
--- Leaf
---
--- >>> foldTree "A"
--- Node 0 Leaf 'A' Leaf
---
--- >>> foldTree "AB"
--- Node 0 Node 0 Leaf 'A' Leaf 'B' Leaf
---
---
-foldTree :: [a] -> Tree a
-foldTree = foldr(foldingFn) Leaf
-
-foldingFn x Leaf = Node 0 Leaf x Leaf
-foldingFn x (Node h left root right) = Node 0 (Node h Leaf x Leaf) root right
