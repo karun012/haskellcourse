@@ -70,3 +70,13 @@ xor = not . foldl(==) False
 map' :: (a -> b) -> [a] -> [b]
 map' fn = foldr((:) . fn) []
 
+-- | Implementation of foldl using foldr
+--
+-- >>> foldl' (\_ x -> x) 0 [1,2,3,4]
+-- 4
+--
+-- >>> foldl (\acc x -> x : acc) [] [1,2,3,4]
+-- [4,3,2,1]
+--
+foldl' :: (a -> b -> a) -> a -> [b] -> a
+foldl' fn base xs = foldr(flip fn) base $ reverse xs
