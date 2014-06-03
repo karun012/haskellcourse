@@ -42,3 +42,17 @@ fun2 n
 fun2' :: Integer -> Integer
 fun2' = sum . filter even . takeWhile (> 1) . iterate (\x -> if even x then x `div` 2 else 3 * x + 1)
 
+-- | Implementation of xor using fold
+--
+-- >>> xor [False, True, False]
+-- True
+-- 
+-- >>> xor [False, True, False, False, True]
+-- False
+--
+-- >>> xor [True, True, False, False, True, True, False, False, True]
+-- True
+--
+xor :: [Bool] -> Bool
+xor = not . foldl(==) False
+
