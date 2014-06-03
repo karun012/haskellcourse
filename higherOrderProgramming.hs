@@ -1,5 +1,13 @@
 module HigherOrderProgramming where
 
+-- | Helper functions
+-- 
+-- >>> cartProd [1,2] ['a','b']
+-- [(1,'a'),(1,'b'),(2,'a'),(2,'b')]
+--
+cartProd :: [a] -> [b] -> [(a, b)]
+cartProd xs ys = [(x,y) | x <- xs, y <- ys]
+
 -- | Runs (x - 2) on all even numbers, and sums them up
 --
 -- >>> fun1 [10,12,14,16]
@@ -80,3 +88,11 @@ map' fn = foldr((:) . fn) []
 --
 foldl' :: (a -> b -> a) -> a -> [b] -> a
 foldl' fn base xs = foldr(flip fn) base $ reverse xs
+
+-- | Generates all odd primes up to 2n + 2
+-- 
+-- >>> sieveSundaram 2
+-- [1,3,5]
+--
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram n = filter odd . map snd . filter ((==) 0 . uncurry (flip mod)) $ cartProd [1,n] [1..(2 * n + 2)]
