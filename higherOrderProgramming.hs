@@ -56,3 +56,17 @@ fun2' = sum . filter even . takeWhile (> 1) . iterate (\x -> if even x then x `d
 xor :: [Bool] -> Bool
 xor = not . foldl(==) False
 
+-- | Implementing map using fold
+--
+-- >>> map' (+2) [1,2,3,4]
+-- [3,4,5,6]
+--
+-- >>> map' (++ "!") ["BIFF", "BANG", "POW"]  
+-- ["BIFF!","BANG!","POW!"] 
+--
+-- >>> map' (replicate 3) [3..6]  
+-- [[3,3,3],[4,4,4],[5,5,5],[6,6,6]]
+--
+map' :: (a -> b) -> [a] -> [b]
+map' fn = foldr((:) . fn) []
+
