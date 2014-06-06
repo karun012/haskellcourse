@@ -31,3 +31,18 @@ eval expression = case expression of
 --
 evalStr :: String -> Maybe Integer
 evalStr str = eval <$> parseExp Lit Add Mul str
+
+-- | Creating a type class Expr to abstract the properties of ExprT
+--
+-- >>> mul (add (lit 2) (lit 3)) (lit 4) :: ExprT
+-- Mul (Add (Lit 2) (Lit 3)) (Lit 4)
+-- 
+class Expr a where
+  add :: a -> a -> a
+  mul :: a -> a -> a
+  lit :: Integer -> a
+
+instance Expr ExprT where
+  lit = Lit 
+  add = Add 
+  mul = Mul 
