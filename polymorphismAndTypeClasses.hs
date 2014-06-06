@@ -86,6 +86,9 @@ instance Expr Integer where
 -- >>> (mul (lit (-1)) (lit (-1))) :: Bool
 -- False
 --
+-- >>> (mul (add (lit 2) (lit 3)) (lit 4)) :: Bool
+-- True
+--
 instance Expr Bool where
   lit = (>0)
   add = (||)
