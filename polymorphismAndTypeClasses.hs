@@ -93,3 +93,22 @@ instance Expr Bool where
   lit = (>0)
   add = (||)
   mul = (&&)
+
+newtype MinMax = MinMax Integer deriving (Show, Eq)
+
+-- | Instance of Expr for MinMax
+--
+-- >>> (lit 4) :: MinMax
+-- MinMax 4
+--
+-- >>> (add (lit 4) (lit 8)) :: MinMax
+-- MinMax 8
+--
+-- >>> (mul (lit 4) (lit 8)) :: MinMax
+-- MinMax 4
+--
+instance Expr MinMax where
+  lit = MinMax
+  add (MinMax x) (MinMax y) = MinMax (max x y)
+  mul (MinMax x) (MinMax y) = MinMax (min x y)
+
