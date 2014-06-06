@@ -94,7 +94,6 @@ instance Expr Bool where
   add = (||)
   mul = (&&)
 
-newtype MinMax = MinMax Integer deriving (Show, Eq)
 
 -- | Instance of Expr for MinMax
 --
@@ -107,8 +106,34 @@ newtype MinMax = MinMax Integer deriving (Show, Eq)
 -- >>> (mul (lit 4) (lit 8)) :: MinMax
 -- MinMax 4
 --
+newtype MinMax = MinMax Integer deriving (Show, Eq)
+
 instance Expr MinMax where
   lit = MinMax
   add (MinMax x) (MinMax y) = MinMax (max x y)
   mul (MinMax x) (MinMax y) = MinMax (min x y)
 
+-- | Instance of Expr for Mod7
+--
+--
+-- >>> (lit 4) :: Mod7
+-- Mod7 4
+--
+-- >>> (lit 8) :: Mod7
+-- Mod7 1
+--
+-- >>> (lit (-2)) :: Mod7
+-- Mod7 5
+--
+-- >>> (add (lit 6) (lit 9)) :: Mod7
+-- Mod7 1
+--
+-- >>> (mul (lit 4) (lit 10)) :: Mod7
+-- Mod7 5
+--
+newtype Mod7 = Mod7 Integer deriving (Eq, Show)
+
+instance Expr Mod7 where
+  lit = Mod7 . flip mod 7
+  add (Mod7 x) (Mod7 y) = Mod7 (flip mod 7 $ x + y)
+  mul (Mod7 x) (Mod7 y) = Mod7 (flip mod 7 $ x * y)
