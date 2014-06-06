@@ -56,3 +56,37 @@ instance Expr Integer where
   lit = id
   add = (+)
   mul = (*)
+
+-- | Instance of Expr for Bool
+--
+-- >>> (lit 3) :: Bool
+-- True
+--
+-- >>> (lit (-2)) :: Bool
+-- False
+--
+-- >>> (add (lit 1) (lit 1)) :: Bool
+-- True
+--
+-- >>> (add (lit (-1)) (lit 1)) :: Bool
+-- True
+--
+-- >>> (add (lit (-1)) (lit (-1))) :: Bool
+-- False
+--
+-- >>> (mul (lit 1) (lit 1)) :: Bool
+-- True
+--
+-- >>> (mul (lit (-1)) (lit 1)) :: Bool
+-- False
+--
+-- >>> (mul (lit 1) (lit (-1))) :: Bool
+-- False
+--
+-- >>> (mul (lit (-1)) (lit (-1))) :: Bool
+-- False
+--
+instance Expr Bool where
+  lit = (>0)
+  add = (||)
+  mul = (&&)
