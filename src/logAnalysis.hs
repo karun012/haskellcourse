@@ -74,7 +74,7 @@ parseMessage xs = case words xs of
 
 -- | Parse a file into a list of LogMessages
 --
--- >>> testParse parse 1 "sample.log"
+-- >>> testParse parse 1 "src/sample.log"
 -- [LogMessage Info 6 "Completed armadillo processing"]
 --
 parse :: String -> [LogMessage]
