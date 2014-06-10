@@ -30,7 +30,7 @@ reverse' xs = error "todo"
 --
 -- >>> toDigits 0
 -- []
---
+-- 
 toDigits :: Integer -> [Integer]
 toDigits n = case n > 0 of 
              True -> map charToInt (show n)
@@ -42,6 +42,8 @@ toDigits n = case n > 0 of
 --
 -- >>> toDigitsRev 1234
 -- [4,3,2,1]
+--
+-- prop> \x -> (toDigitsRev x) == (reverse . toDigits) x
 --
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev = reverse . toDigits
