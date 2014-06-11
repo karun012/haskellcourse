@@ -25,7 +25,7 @@ fun1 (x:xs)
 -- 13440
 --
 fun1' :: [Integer] -> Integer
-fun1' = product . map ((-) 2) . filter even
+fun1' = product . map (2 -) . filter even
 
 -- | Some crazy integer manipulation
 --
