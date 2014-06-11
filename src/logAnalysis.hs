@@ -78,7 +78,7 @@ parseMessage xs = case words xs of
 -- [LogMessage Info 6 "Completed armadillo processing"]
 --
 parse :: String -> [LogMessage]
-parse = (map parseMessage) . lines
+parse = map parseMessage . lines
 
 
 -- | Inserts a LogMessage into a MessageTree
@@ -146,4 +146,4 @@ inOrder Leaf = []
 -- True
 --
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong = map description . (filter (\x -> (severity x) >= 50)) . (filter isError) . inOrder . build
+whatWentWrong = map description . filter (\x -> (severity x) >= 50) . filter isError . inOrder . build
