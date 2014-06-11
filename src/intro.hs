@@ -13,7 +13,7 @@ module Intro where
 -- 0
 --
 charToInt :: Char -> Integer
-charToInt n = (read [n]) :: Integer
+charToInt n = read [n] :: Integer
 
 reverse' :: [Integer] -> [Integer]
 reverse' xs = error "todo"
@@ -79,7 +79,7 @@ doubleEveryOther = reverse . zipWith (*) (cycle [1,2]) . reverse
 -- 22
 --
 sumDigits :: [Integer] -> Integer
-sumDigits = sum . concat . map toDigits
+sumDigits = sum . concatMap toDigits
 
 -- | Validates a credit card number based on the conditions set in the assignment
 --
