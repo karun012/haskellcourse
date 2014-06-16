@@ -69,9 +69,12 @@ localMaxima xs = case length xs > 3 of
                  True -> localMaxima (take 3 xs) ++ localMaxima (drop 1 xs)
                  False -> []
 
+removeUniques :: [Integer] -> [Integer]
+removeUniques xs = (\\) xs (nub xs)
+
 createRowCandidates :: [Integer] -> [[Integer]]
 createRowCandidates xs = case length xs > 0 of
-                         True -> nub xs : (createRowCandidates $ (\\) xs (nub xs))
+                         True -> nub xs : (createRowCandidates . removeUniques) xs 
                          _ -> []
 
 drawRow :: [Integer] -> String
