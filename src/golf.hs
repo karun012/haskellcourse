@@ -70,7 +70,7 @@ localMaxima xs = case length xs > 3 of
                  False -> []
 
 -- | Removes unique values from a list of integers
--- 
+--
 -- >>> removeUniques [1,1,2,3,4,4,5,6] 
 -- [1,4]
 --
@@ -79,14 +79,44 @@ localMaxima xs = case length xs > 3 of
 removeUniques :: [Integer] -> [Integer]
 removeUniques xs = (\\) xs (nub xs)
 
+-- | Creates rows for the histogram
+--
+-- >>> createRowCandidates [1,1,2,3,4,4,5,6] 
+-- [[1,2,3,4,5,6],[1,4]]
+--
+-- >>> createRowCandidates [] 
+-- []
+--
 createRowCandidates :: [Integer] -> [[Integer]]
 createRowCandidates xs = case length xs > 0 of
                          True -> nub xs : (createRowCandidates . removeUniques) xs 
                          _ -> []
 
+-- | Draws a histogram row
+--
+-- >>> drawRow []
+-- "          \n"
+--
+-- >>> drawRow [0,1,2,3,4,5,6,7,8,9]
+-- "**********\n"
+--
+-- >>> drawRow [0,2,4,6,8]
+-- "* * * * * \n"
+--
 drawRow :: [Integer] -> String
 drawRow xs = concatMap (\x -> if x `elem` xs then "*" else " ") [0..9] ++ "\n"
 
+-- | Draws multiple rows
+--
+-- >>> drawRows [[]]
+-- "          \n"
+--
+-- >>> drawRows [[0,1,2,3,4,5,6,7,8,9]]
+-- "**********\n"
+--
+-- >>> drawRows [[0,1,2,3,4,5,6,7,8,9],[0,2,4,6,8]]
+-- "**********\n* * * * * \n"
+--
 drawRows :: [[Integer]] -> String
 drawRows = concatMap drawRow
 
@@ -94,6 +124,6 @@ drawRows = concatMap drawRow
 --
 -- >>> histogram [3,5]
 -- "   * *    \n==========\n0123456789\n"
--- 
+--
 histogram :: [Integer] -> String
 histogram = (++ "==========\n0123456789\n") . drawRows . createRowCandidates . sort
