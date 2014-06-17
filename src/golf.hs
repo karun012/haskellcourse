@@ -69,6 +69,13 @@ localMaxima xs = case length xs > 3 of
                  True -> localMaxima (take 3 xs) ++ localMaxima (drop 1 xs)
                  False -> []
 
+-- | Removes unique values from a list of integers
+-- 
+-- >>> removeUniques [1,1,2,3,4,4,5,6] 
+-- [1,4]
+--
+-- >>> removeUniques [1,2,3,4]
+-- []
 removeUniques :: [Integer] -> [Integer]
 removeUniques xs = (\\) xs (nub xs)
 
