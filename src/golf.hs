@@ -1,6 +1,7 @@
 module Golf where
 
 import Data.List
+import Data.Set (toList, fromList)
 
 -- | Helper functions
 --
@@ -78,6 +79,18 @@ localMaxima xs = case length xs > 3 of
 -- []
 removeUniques :: [Integer] -> [Integer]
 removeUniques xs = (\\) xs (nub xs)
+
+
+-- | Gets a unique values from a list of integers
+--
+-- >>> uniques [1,1,2,3,4,4,5,6] 
+-- [1,2,3,4,5,6]
+--
+-- >>> uniques [] 
+-- []
+--
+uniques :: [Integer] -> [Integer]
+uniques = toList . fromList
 
 -- | Creates rows for the histogram
 --
