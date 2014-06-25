@@ -1,8 +1,12 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module PolymorphismAndTypeClasses where
 
 import ExprT
 import Parser
 import Control.Applicative
+import Data.Maybe
+import qualified Data.Map as M
 
 -- | Evaluates an expression
 --
@@ -137,3 +141,57 @@ instance Expr Mod7 where
   lit = Mod7 . flip mod 7
   add (Mod7 x) (Mod7 y) = Mod7 (flip mod 7 $ x + y)
   mul (Mod7 x) (Mod7 y) = Mod7 (flip mod 7 $ x * y)
+
+
+class HasVars a where
+    var :: String -> a
+
+data VarExprT = VarLit Integer
+           | VarAdd VarExprT VarExprT
+           | VarMul VarExprT VarExprT
+           | Variable String
+  deriving (Show, Eq)
+
+instance Expr VarExprT where
+  lit = VarLit
+  add = VarAdd
+  mul = VarMul
+
+instance HasVars VarExprT where
+  var = Variable
+
+instance HasVars (M.Map String Integer -> Maybe Integer) where
+  var = M.lookup
+
+maybeAdd :: Maybe Integer -> Maybe Integer -> Maybe Integer
+maybeAdd (Just x) (Just y) = Just (x + y)
+maybeAdd _ _ = Nothing
+
+maybeMultiply :: Maybe Integer -> Maybe Integer -> Maybe Integer
+maybeMultiply (Just x) (Just y) = Just (x * y)
+maybeMultiply _ _ = Nothing
+
+instance Expr (M.Map String Integer -> Maybe Integer) where
+  lit fn = (<$>) Just (\_ -> fn)
+  add x y = (<$>) maybeAdd x <*> y
+  mul x y = (<$>) maybeMultiply x <*> y
+
+-- | Testing calculator with intermediate vars
+--
+-- >>> withVars [("x", 4)] $ (var "x")
+-- Just 4
+--
+-- >>> withVars [("x", 6)] $ add (lit 3) (var "x")
+-- Just 9
+--
+-- >>> withVars [("x", 6)] $ add (lit 3) (var "y")
+-- Nothing
+--
+-- >>> withVars [("x", 6), ("y", 3)] $ mul (var "x") (add (var "y") (var "x"))
+-- Just 54
+--
+withVars :: [(String, Integer)]
+    -> (M.Map String Integer -> Maybe Integer)
+    -> Maybe Integer
+withVars vs exp = exp $ M.fromList vs
+
