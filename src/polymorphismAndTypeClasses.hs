@@ -17,10 +17,9 @@ import qualified Data.Map as M
 -- 5
 --
 eval :: ExprT -> Integer
-eval expression = case expression of
-                  Lit x -> x
-                  Add x y -> eval x + eval y
-                  Mul x y -> eval x * eval y
+eval (Lit x)   = x
+eval (Add x y) = eval x + eval y
+eval (Mul x y) = eval x * eval y
 
 -- | Evaluates arithmetic expressions given as strings
 --
