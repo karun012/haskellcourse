@@ -33,7 +33,7 @@ eval (Mul x y) = eval x * eval y
 -- Nothing
 --
 evalStr :: String -> Maybe Integer
-evalStr str = eval <$> parseExp Lit Add Mul str
+evalStr = (<$>) eval . (parseExp Lit Add Mul)
 
 -- | Creating a type class Expr to abstract the properties of ExprT
 --
