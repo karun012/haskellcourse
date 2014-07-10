@@ -151,14 +151,43 @@ data VarExprT = VarLit Integer
            | Variable String
   deriving (Show, Eq)
 
+-- | Instance of Expr for VarExprT
+--
+-- >>> lit 3 :: VarExprT
+-- VarLit 3
+--
+-- >>> mul (lit 3) (var "x") :: VarExprT
+-- VarMul (VarLit 3) (Variable "x")
+--
+-- >>> add (lit 3) (var "x") :: VarExprT
+-- VarAdd (VarLit 3) (Variable "x")
+--
+-- >>> mul (add (lit 3) (var "x")) (lit 3) :: VarExprT
+-- VarMul (VarAdd (VarLit 3) (Variable "x")) (VarLit 3)
+--
 instance Expr VarExprT where
   lit = VarLit
   add = VarAdd
   mul = VarMul
 
+-- | Instance of HasVars for VarExprT
+--
+-- >>> var "x" :: VarExprT
+-- Variable "x"
+-- 
 instance HasVars VarExprT where
   var = Variable
 
+-- | Instance of HasVars for (M.Map String Integer -> Maybe Integer)
+--
+-- >>> let sampleMap = M.fromList [("x", 4)] 
+-- >>> let result = var "x" :: (M.Map String Integer -> Maybe Integer)
+-- >>> (result . M.fromList) [("x", 4)]
+-- Just 4
+--
+-- >>> (result . M.fromList) [("z", 4)]
+-- Nothing
+--
 instance HasVars (M.Map String Integer -> Maybe Integer) where
   var = M.lookup
 
