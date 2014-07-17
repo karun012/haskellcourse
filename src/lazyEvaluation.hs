@@ -90,3 +90,11 @@ streamMap fn s = (fromList . map fn . streamToList) s
 --
 streamFromSeed :: (a -> a) -> a -> Stream a
 streamFromSeed fn x = Cons x $ streamFromSeed fn (fn x)
+
+-- | Generates a stream with an infinite list of natural numbers
+--
+-- >>> nats
+-- 0123
+--
+nats :: Stream Integer
+nats = streamFromSeed (+1) 0
