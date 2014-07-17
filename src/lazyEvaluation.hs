@@ -41,3 +41,14 @@ fibs1 = map fib [0..]
 --
 fibs2 :: [Integer]
 fibs2 = 0 : 1 : zipWith (+) fibs2 (tail fibs2)
+
+data Stream a = Cons a (Stream a)
+
+fromList :: [a] -> Stream a
+fromList (x:xs) = Cons x (fromList xs)
+
+streamToList :: Stream a -> [a]
+streamToList (Cons first rest) = first : (streamToList rest)
+
+instance Show a => Show (Stream a) where
+    show (Cons x xs)  = (concat . take 4 . map show . (:) x . streamToList) xs
