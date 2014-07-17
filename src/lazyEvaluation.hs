@@ -79,3 +79,14 @@ streamRepeat a = Cons a (streamRepeat a)
 --
 streamMap :: (a -> b) -> Stream a -> Stream b
 streamMap fn s = (fromList . map fn . streamToList) s
+
+-- | Generates a stream from a seed, and an unfolding rule
+--
+-- >>> streamFromSeed (+1) 4
+-- 4567
+--
+-- >>> streamFromSeed (id) 9
+-- 9999
+--
+streamFromSeed :: (a -> a) -> a -> Stream a
+streamFromSeed fn x = Cons x $ streamFromSeed fn (fn x)
