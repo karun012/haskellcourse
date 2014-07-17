@@ -63,3 +63,19 @@ streamToList (Cons first rest) = first : (streamToList rest)
 
 instance Show a => Show (Stream a) where
     show (Cons x xs)  = (concat . take 4 . map show . (:) x . streamToList) xs
+
+-- | Generates a stream with infinite copies of the given element
+--
+-- >>> streamRepeat 4
+-- 4444
+--
+streamRepeat :: a -> Stream a
+streamRepeat a = Cons a (streamRepeat a)
+
+-- | Maps a function over a stream
+--
+-- >>> (streamMap (+2) . fromList) [1..]
+-- 3456
+--
+streamMap :: (a -> b) -> Stream a -> Stream b
+streamMap fn s = (fromList . map fn . streamToList) s
