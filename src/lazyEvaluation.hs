@@ -98,3 +98,11 @@ streamFromSeed fn x = Cons x $ streamFromSeed fn (fn x)
 --
 nats :: Stream Integer
 nats = streamFromSeed (+1) 0
+
+-- | Interleaves two streams
+--
+-- >>> interleave (fromList [2,4..]) (fromList [1,3..])
+-- 2143
+--
+interleave :: Stream a -> Stream a -> Stream a
+interleave xs ys = (fromList . concatMap (\(a, b) -> [a, b])) $ zip (streamToList xs) (streamToList ys)
