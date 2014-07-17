@@ -44,9 +44,20 @@ fibs2 = 0 : 1 : zipWith (+) fibs2 (tail fibs2)
 
 data Stream a = Cons a (Stream a)
 
+-- | Converts a list to a Stream
+--
+-- >>> fromList [1..]
+-- 1234
+--
 fromList :: [a] -> Stream a
 fromList (x:xs) = Cons x (fromList xs)
 
+-- | Converts a Stream to a list
+--
+-- >>> let x = fromList [1..]
+-- >>> (take 4 . streamToList) x
+-- [1,2,3,4]
+--
 streamToList :: Stream a -> [a]
 streamToList (Cons first rest) = first : (streamToList rest)
 
