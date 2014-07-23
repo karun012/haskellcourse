@@ -1,5 +1,7 @@
 module LazyEvaluation where
 
+import Data.List
+
 -- | Computes the nth fibonacci number recursively
 --
 -- >>> fib 0
@@ -106,3 +108,36 @@ nats = streamFromSeed (+1) 0
 --
 interleave :: Stream a -> Stream a -> Stream a
 interleave xs ys = (fromList . concatMap (\(a, b) -> [a, b])) $ zip (streamToList xs) (streamToList ys)
+
+headOr :: Integer -> [Integer] -> Integer
+headOr n [] = n
+headOr _ xs = head xs
+
+-- | Computes the largest power of 2 that divides the given number evenly
+--
+-- >>> largestPowerOfTwoThatDividesEvenly 4
+-- 2
+--
+-- >>> largestPowerOfTwoThatDividesEvenly 2
+-- 1
+--
+-- >>> largestPowerOfTwoThatDividesEvenly 6
+-- 1
+--
+-- >>> largestPowerOfTwoThatDividesEvenly 0
+-- 0
+--
+-- >>> largestPowerOfTwoThatDividesEvenly 8
+-- 3
+--
+largestPowerOfTwoThatDividesEvenly :: Integer -> Integer
+largestPowerOfTwoThatDividesEvenly 0 = 0
+largestPowerOfTwoThatDividesEvenly n = ((+1) . (headOr 0) . map toInteger . findIndices (==0) . map (flip mod n) . map (2^)) [1..n]
+
+-- | Ruler function
+--
+-- (take 16 . streamToList) ruler
+-- [0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4]
+--
+ruler :: Stream Integer
+ruler = interleave (streamRepeat 0) ((fromList . map largestPowerOfTwoThatDividesEvenly) [2,4..])
