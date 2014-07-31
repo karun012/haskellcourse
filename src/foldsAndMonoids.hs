@@ -1,0 +1,2 @@
+moudle FoldsAndMonoids where
+
