@@ -43,9 +43,6 @@ tag (Append m _ _) = m
 -- Product {getProduct = 6}
 --
 (+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
-(+++) first@(Empty) second@(Append n _ _) = Append (mempty <> n) first second
-(+++) first@(Append n _ _) second@(Empty) = Append (n <> mempty) first second
-(+++) first@(Single m _) second@(Single n _) = Append (m <> n) first second
-(+++) first@(Single m _) second@(Append n _ _) = Append (m <> n) first second
-(+++) first@(Append m _ _) second@(Single n _) = Append (m <> n) first second
-(+++) first@(Append m _ _) second@(Append n _ _) = Append (m <> n) first second
+(+++) first (Empty) = first
+(+++) (Empty) second = second
+(+++) first second = (Append . (uncurry mappend)) (tag first, tag second) first second
