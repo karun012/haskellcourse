@@ -1,3 +1,4 @@
+{-# LANGUAGE DataKinds #-}
 module FoldsAndMonoids where
 
 import JoinList
@@ -14,3 +15,37 @@ import Data.Monoid
 tag :: Monoid m => JoinList m a -> m
 tag (Single m _) = m
 tag (Append m _ _) = m
+
+-- | Joins two JoinLists
+--
+-- >>> let joinListSample = (Single (Product 5) 'y') +++ (Single (Product 3) 'z')
+-- >>> tag joinListSample
+-- Product {getProduct = 15}
+--
+-- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ (Single (Product 3) 'z')
+-- >>> tag joinListSample
+-- Product {getProduct = 18}
+--
+-- >>> let joinListSample = (Single (Product 3) 'z') +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) 
+-- >>> tag joinListSample
+-- Product {getProduct = 18}
+--
+-- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) 
+-- >>> tag joinListSample
+-- Product {getProduct = 36}
+--
+-- >>> let joinListSample = (Empty) +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) 
+-- >>> tag joinListSample
+-- Product {getProduct = 6}
+--
+-- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ (Empty) 
+-- >>> tag joinListSample
+-- Product {getProduct = 6}
+--
+(+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
+(+++) first@(Empty) second@(Append n _ _) = Append (mempty <> n) first second
+(+++) first@(Append n _ _) second@(Empty) = Append (n <> mempty) first second
+(+++) first@(Single m _) second@(Single n _) = Append (m <> n) first second
+(+++) first@(Single m _) second@(Append n _ _) = Append (m <> n) first second
+(+++) first@(Append m _ _) second@(Single n _) = Append (m <> n) first second
+(+++) first@(Append m _ _) second@(Append n _ _) = Append (m <> n) first second
