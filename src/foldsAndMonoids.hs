@@ -3,6 +3,7 @@ module FoldsAndMonoids where
 
 import JoinList
 import Data.Monoid
+import Sized
 
 -- | Gets the annotation at the root of a JoinList
 --
@@ -12,9 +13,13 @@ import Data.Monoid
 -- >>> tag (Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))
 -- Product {getProduct = 6}
 --
+-- >>> tag (Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))
+-- Product {getProduct = 6}
+--
 tag :: Monoid m => JoinList m a -> m
 tag (Single m _) = m
 tag (Append m _ _) = m
+tag (Empty) = mempty
 
 -- | Joins two JoinLists
 --
@@ -46,3 +51,14 @@ tag (Append m _ _) = m
 (+++) first (Empty) = first
 (+++) (Empty) second = second
 (+++) first second = (Append . (uncurry mappend)) (tag first, tag second) first second
+
+-- | Finds the JoinList element at the specified index
+--
+-- indexJ 10 (Single (Size 1) 'y')
+-- Nothing
+--
+-- indexJ 1 (Single (Size 1) 'y')
+-- y
+--
+indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
+indexJ = error "todo"
