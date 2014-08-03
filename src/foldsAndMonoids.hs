@@ -54,11 +54,20 @@ tag (Empty) = mempty
 
 -- | Finds the JoinList element at the specified index
 --
--- indexJ 10 (Single (Size 1) 'y')
+-- >>> indexJ 10 (Single (Size 3) 'y')
 -- Nothing
 --
--- indexJ 1 (Single (Size 1) 'y')
--- y
+-- >>> indexJ 1 (Single (Size 1) 'y')
+-- Just 'y'
 --
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
-indexJ = error "todo"
+indexJ index joinList
+                | index > getSize' joinList = Nothing
+                | index == getSize' joinList = getValue joinList
+
+getSize' :: (Sized b, Monoid b) => JoinList b a -> Int
+getSize' = (getSize . size . tag)
+
+getValue :: JoinList b a -> Maybe a
+getValue (Single _ a) = Just a
+getValue (Empty) = Nothing
