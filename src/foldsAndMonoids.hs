@@ -23,6 +23,14 @@ tag (Empty) = mempty
 
 -- | Joins two JoinLists
 --
+-- >>> let joinListSample = (Single (Product 5) 'y') +++ (Empty)
+-- >>> tag joinListSample
+-- Product {getProduct = 5}
+--
+-- >>> let joinListSample = (Empty) +++ (Single (Product 6) 'y')
+-- >>> tag joinListSample
+-- Product {getProduct = 6}
+--
 -- >>> let joinListSample = (Single (Product 5) 'y') +++ (Single (Product 3) 'z')
 -- >>> tag joinListSample
 -- Product {getProduct = 15}
@@ -31,21 +39,13 @@ tag (Empty) = mempty
 -- >>> tag joinListSample
 -- Product {getProduct = 18}
 --
--- >>> let joinListSample = (Single (Product 3) 'z') +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) 
+-- >>> let joinListSample = (Single (Product 3) 'z') +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a')))
 -- >>> tag joinListSample
 -- Product {getProduct = 18}
 --
--- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) 
+-- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a')))
 -- >>> tag joinListSample
 -- Product {getProduct = 36}
---
--- >>> let joinListSample = (Empty) +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) 
--- >>> tag joinListSample
--- Product {getProduct = 6}
---
--- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ (Empty) 
--- >>> tag joinListSample
--- Product {getProduct = 6}
 --
 (+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
 (+++) first (Empty) = first
