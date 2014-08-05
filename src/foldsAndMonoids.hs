@@ -28,28 +28,28 @@ tag (Empty) = mempty
 -- >>> let singleElementListB = Single (Product 3) 'y'
 -- >>> let twoElementList = Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a')
 --
--- >>> let joinListSample = singleElementListA +++ emptyList
--- >>> tag joinListSample
+-- >>> let singlePlusEmpty = singleElementListA +++ emptyList
+-- >>> tag singlePlusEmpty
 -- Product {getProduct = 6}
 --
--- >>> let joinListSample = emptyList +++ singleElementListA
--- >>> tag joinListSample
+-- >>> let emptyPlusSingle = emptyList +++ singleElementListA
+-- >>> tag emptyPlusSingle
 -- Product {getProduct = 6}
 --
--- >>> let joinListSample = singleElementListA +++ singleElementListB
--- >>> tag joinListSample
+-- >>> let singlePlusSingle = singleElementListA +++ singleElementListB
+-- >>> tag singlePlusSingle
 -- Product {getProduct = 18}
 --
--- >>> let joinListSample = twoElementList +++ singleElementListA
--- >>> tag joinListSample
+-- >>> let twoElementPlusSingle = twoElementList +++ singleElementListA
+-- >>> tag twoElementPlusSingle
 -- Product {getProduct = 36}
 --
--- >>> let joinListSample = singleElementListA +++ twoElementList
--- >>> tag joinListSample
+-- >>> let singlePlusTwoElement = singleElementListA +++ twoElementList
+-- >>> tag singlePlusTwoElement
 -- Product {getProduct = 36}
 --
--- >>> let joinListSample = twoElementList +++ twoElementList
--- >>> tag joinListSample
+-- >>> let twoElementPlusTwoElement = twoElementList +++ twoElementList
+-- >>> tag twoElementPlusTwoElement
 -- Product {getProduct = 36}
 --
 (+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
