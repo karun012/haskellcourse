@@ -23,27 +23,32 @@ tag (Empty) = mempty
 
 -- | Joins two JoinLists
 --
--- >>> let joinListSample = (Single (Product 5) 'y') +++ (Empty)
--- >>> tag joinListSample
--- Product {getProduct = 5}
+-- >>> let emptyList = Empty
+-- >>> let singleElementListA = Single (Product 6) 'y'
+-- >>> let singleElementListB = Single (Product 3) 'y'
+-- >>> let twoElementList = Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a')
 --
--- >>> let joinListSample = (Empty) +++ (Single (Product 6) 'y')
+-- >>> let joinListSample = singleElementListA +++ emptyList
 -- >>> tag joinListSample
 -- Product {getProduct = 6}
 --
--- >>> let joinListSample = (Single (Product 5) 'y') +++ (Single (Product 3) 'z')
+-- >>> let joinListSample = emptyList +++ singleElementListA
 -- >>> tag joinListSample
--- Product {getProduct = 15}
+-- Product {getProduct = 6}
 --
--- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ (Single (Product 3) 'z')
--- >>> tag joinListSample
--- Product {getProduct = 18}
---
--- >>> let joinListSample = (Single (Product 3) 'z') +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a')))
+-- >>> let joinListSample = singleElementListA +++ singleElementListB
 -- >>> tag joinListSample
 -- Product {getProduct = 18}
 --
--- >>> let joinListSample = ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a'))) +++ ((Append (Product 6) (Single (Product 2) 'e') (Single (Product 3) 'a')))
+-- >>> let joinListSample = twoElementList +++ singleElementListA
+-- >>> tag joinListSample
+-- Product {getProduct = 36}
+--
+-- >>> let joinListSample = singleElementListA +++ twoElementList
+-- >>> tag joinListSample
+-- Product {getProduct = 36}
+--
+-- >>> let joinListSample = twoElementList +++ twoElementList
 -- >>> tag joinListSample
 -- Product {getProduct = 36}
 --
