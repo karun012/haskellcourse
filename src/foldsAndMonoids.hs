@@ -62,16 +62,16 @@ tag (Empty) = mempty
 -- >>> indexJ 0 (Single (Size 0) 'y')
 -- Just 'y'
 --
--- >>> let leftLevel1 = Append (Size 1) (Single (Size 1) 'y') Empty
--- >>> let rightLevel1 = Append (Size 2) (Single (Size 1) 'z') (Single (Size 1) 'a')
--- >>> let main = leftLevel1 +++ rightLevel1
--- >>> indexJ 0 main
+-- >>> let left = Append (Size 1) (Single (Size 1) 'y') Empty
+-- >>> let right = Append (Size 2) (Single (Size 1) 'z') (Single (Size 1) 'a')
+-- >>> let root = left +++ right
+-- >>> indexJ 0 root
 -- Just 'y'
 --
--- >>> indexJ 1 main
+-- >>> indexJ 1 root
 -- Just 'z'
 --
--- >>> indexJ 2 main
+-- >>> indexJ 2 root
 -- Just 'a'
 --
 -- >>> Just (jlToList main !! 1) == indexJ 1 main

@@ -13,7 +13,7 @@ import Data.List
 -- >>> fib 2
 -- 1
 --
--- >>> fib 14
+-- >>> fib 1
 -- 377
 --
 fib :: Integer -> Integer
