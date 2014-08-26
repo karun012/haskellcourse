@@ -59,20 +59,32 @@ tag (Empty) = mempty
 
 -- | Finds the JoinList element at the specified index
 --
--- >>> indexJ 10 (Single (Size 3) 'y')
--- Nothing
---
--- >>> indexJ 1 (Single (Size 1) 'y')
+-- >>> indexJ 0 (Single (Size 0) 'y')
 -- Just 'y'
 --
+-- >>> let leftLevel1 = Append (Size 1) (Single (Size 1) 'y') Empty
+-- >>> let rightLevel1 = Append (Size 2) (Single (Size 1) 'z') (Single (Size 1) 'a')
+-- >>> let main = leftLevel1 +++ rightLevel1
+-- >>> indexJ 0 main
+-- Just 'y'
+--
+-- >>> indexJ 1 main
+-- Just 'z'
+--
+-- >>> indexJ 2 main
+-- Just 'a'
+--
+-- >>> Just (jlToList main !! 1) == indexJ 1 main
+-- True
+--
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
-indexJ index joinList
-                | index > getSize' joinList = Nothing
-                | index == getSize' joinList = getValue joinList
+indexJ index Empty = Nothing
+indexJ index (Single _ val) = Just val
+indexJ index (Append _ left right) = case ((Size index) < (size . tag) left) of
+                                       True -> indexJ (index - 1) left
+                                       False -> indexJ (index - 1) right
 
-getSize' :: (Sized b, Monoid b) => JoinList b a -> Int
-getSize' = (getSize . size . tag)
-
-getValue :: JoinList b a -> Maybe a
-getValue (Single _ a) = Just a
-getValue (Empty) = Nothing
+jlToList :: JoinList m a -> [a]
+jlToList Empty = []
+jlToList (Single _ a) = [a]
+jlToList (Append _ l1 l2) = jlToList l1 ++ jlToList l2
