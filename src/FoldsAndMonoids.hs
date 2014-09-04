@@ -74,17 +74,22 @@ tag (Empty) = mempty
 -- >>> indexJ 2 root
 -- Just 'a'
 --
--- >>> Just (jlToList main !! 1) == indexJ 1 main
+-- >>> Just (jlToList root !! 1) == indexJ 1 root
 -- True
 --
-indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
-indexJ index Empty = Nothing
-indexJ index (Single _ val) = Just val
-indexJ index (Append _ left right) = case ((Size index) < (size . tag) left) of
-                                       True -> indexJ (index - 1) left
-                                       False -> indexJ (index - 1) right
 
 jlToList :: JoinList m a -> [a]
 jlToList Empty = []
 jlToList (Single _ a) = [a]
 jlToList (Append _ l1 l2) = jlToList l1 ++ jlToList l2
+
+
+indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
+indexJ _ (Empty)              = Nothing
+indexJ 0 (Single m a)         = Just a
+indexJ n (Single m a) | n > 0 = Nothing
+indexJ n _            | n < 0 = Nothing
+indexJ n (Append m jl1 jl2)
+  | n < leftSize = indexJ n jl1
+  | otherwise = indexJ (n - leftSize) jl2
+  where leftSize = getSize . size $ (tag jl1)

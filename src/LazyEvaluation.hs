@@ -14,7 +14,7 @@ import Data.List
 -- 1
 --
 -- >>> fib 1
--- 377
+-- 1
 --
 fib :: Integer -> Integer
 fib 0 = 0
